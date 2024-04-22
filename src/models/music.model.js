@@ -21,7 +21,7 @@ const musicSchema = new mongoose.Schema({
   },
   coverImage: {
     type: String, // Cloudinary
-    required: true,
+    
   },
   musicFile: {
     type: String, // Cloudinary
@@ -41,7 +41,7 @@ const musicSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Released", "Pending", "Await"],
+    enum: ["Released", "Pending", "Await","Requested"],
     default: "Requested",
   },
   releaseDate: {
@@ -56,5 +56,5 @@ const musicSchema = new mongoose.Schema({
 
 );
 
-export const Video = mongoose.model("Music", musicSchema);
+export const Music = mongoose.model("Music", musicSchema);
 
