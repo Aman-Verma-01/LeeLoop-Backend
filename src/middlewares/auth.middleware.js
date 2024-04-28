@@ -10,7 +10,7 @@ dotenv.config()
 export const verifyJWT = asyncHandler (async (req,res,next) => {
     try {
         
-        const token =  req.header("authorization").replace("bearer ", "")
+        const token =  req.header("Authorization").replace("bearer ", "")
         if(!token){
 
             return res.status(401).json({

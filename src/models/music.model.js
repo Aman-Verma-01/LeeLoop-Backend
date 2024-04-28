@@ -48,6 +48,10 @@ const musicSchema = new mongoose.Schema({
     type: String,
     default:"",
   },
+  publishedLink:{
+    type:String,
+    default:"Not Released Yet"
+  }
 
 },
 {
