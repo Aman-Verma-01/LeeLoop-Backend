@@ -11,9 +11,9 @@ dotenv.config();
 const registerUser = async (req, res) => {
   try {
     // Destructure fields from the request body
-    const { fullName, email, password } = req.body;
+    const { username, email, password } = req.body;
     // Check if All Details are there or not
-    if (!fullName || !email || !password) {
+    if (!username || !email || !password) {
       return res.status(403).send({
         success: false,
         message: "All Fields are required",
@@ -35,7 +35,7 @@ const registerUser = async (req, res) => {
 
     // Create the user
     const user = await User.create({
-      fullName,
+      username,
       email,
       password: hashedPassword,
     });
@@ -171,11 +171,11 @@ const getAllUser = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-
-    const {id} =  req.body || req.user.id ;
-    const user = await User.findOne({_id:id})
-      .populate("uploadedMusic")
-      .exec();
+    
+    const id =   req.user
+    console.log("ID ********************************")
+    console.log(id)
+    const user = await User.findById(id).select("-password").exec();
 
     return res.status(200).json({
       success: true,

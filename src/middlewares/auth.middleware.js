@@ -10,7 +10,7 @@ dotenv.config()
 export const verifyJWT = asyncHandler (async (req,res,next) => {
     try {
         
-        const token =  req.cookies?.token || req.header("authorization").replace("bearer ", "")
+        const token =  req.header("authorization").replace("bearer ", "")
         if(!token){
 
             return res.status(401).json({
@@ -30,7 +30,9 @@ export const verifyJWT = asyncHandler (async (req,res,next) => {
 			});
         }
 
-        req.user = user
+        req.user = decodedToken.id
+        console.log("Token *******************")
+        console.log(req.user)
         next()
 
 
