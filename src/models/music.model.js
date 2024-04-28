@@ -46,7 +46,7 @@ const musicSchema = new mongoose.Schema({
   },
   releaseDate: {
     type: String,
-    default:"",
+    default:"Not Set yet",
   },
   publishedLink:{
     type:String,
