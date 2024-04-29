@@ -23,6 +23,7 @@ export const uploadMusic = async (req, res) => {
 
     // Get thumbnail image from request files
     const coverImage = req.files.coverImage;
+    
     // Get music file from request files
     const musicFile = req.files.musicFile;
 
@@ -57,7 +58,7 @@ export const uploadMusic = async (req, res) => {
     }
 
     // get artist mongoid from req.user
-    const artist = userId;
+    const artist = req.user;
 
     // music , cover => Cloudinary
     const coverImageURL = await uploadOnCloudinary(coverImage);

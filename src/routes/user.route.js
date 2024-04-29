@@ -23,5 +23,7 @@ router.route("/logout").post(verifyJWT, logoutUser);
 
 router.get("/allDetails",verifyJWT , getUserById)
 
+router.post("/updateUserDetails" , verifyJWT , updateUserDetails)
+
 
 export default router;

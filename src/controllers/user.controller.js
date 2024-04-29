@@ -3,6 +3,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+
 import bcrypt from "bcrypt";
 
 import dotenv from "dotenv";
@@ -187,10 +189,12 @@ const updateUserDetails = async (req, res) => {
   try {
     const { username, address } = req.body;
     // Get  image from request files
-    const profileImage = req.files.coverImage;
+    const profileImage = req.files.profileImage;
+    console.log(profileImage)
     const id = req.user;
 
-    const profileImageURL = await uploadOnCloudinary(coverImage);
+    const profileImageURL = await uploadOnCloudinary(profileImage);
+    console.log(profileImageURL)
 
     const updateUserDetails = await User.findByIdAndUpdate(
       id,

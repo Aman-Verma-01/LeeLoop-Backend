@@ -22,10 +22,11 @@ cloudinary.config({
     return response.url;
   } catch (error) {
    
+    
     // Removes loacl saved temporary file as the upload operation gets failed
     console.log("Error in cloudlinary Uploading file : " + error)
 
-    return null;
+    return error;
   }
 };
 

@@ -32,11 +32,17 @@ const userSchema = new mongoose.Schema(
         ref: "Music",
       },
     ],
+
+    chat:{
+      type:Boolean,
+      default:false
+    },
    
     password: {
       type: String,
       required: [true, "Password is required"],
     },
+
     token: {
       type: String,
     },
@@ -46,3 +52,4 @@ const userSchema = new mongoose.Schema(
 
 
 export const User = mongoose.model("User", userSchema);
+0
