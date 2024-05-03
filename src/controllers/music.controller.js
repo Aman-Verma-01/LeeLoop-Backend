@@ -198,6 +198,29 @@ export const updateMusic = async (req, res) => {
   }
 };
 
+export const deleteMusic = async (req,res) => {
+  try {
+    const musicId = req.params.musicId;
+    const userId = req.user
+
+    // Delete the music by its ID from the Music collection
+    await Music.findByIdAndDelete(musicId);
+
+    const user = await User.findByIdAndUpdate(userId , {
+      $pull : {
+        uploadedMusic : musicId
+      }
+    });
+
+   
+
+    res.status(200).json({ message: 'Music deleted successfully.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+}
+
 
 
 
