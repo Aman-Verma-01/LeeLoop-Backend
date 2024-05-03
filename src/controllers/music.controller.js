@@ -1,6 +1,9 @@
 import { User } from "../models/user.model.js";
 import { Music } from "../models/music.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {mailSender} from "../utils/mailSender.js"
+import {musicRegisterSuccessfullMail} from "../mails/musicUploadedMail.js"
+
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -72,7 +75,7 @@ export const uploadMusic = async (req, res) => {
       subTitle,
       mainGenre,
       duration,
-      musicMastering,
+      musicMastering:true,
       coverImageByLeeLoop,
       artist: artist,
       coverImage: coverImageURL,
@@ -84,13 +87,40 @@ export const uploadMusic = async (req, res) => {
     await User.findByIdAndUpdate(artist, {
       $push: { uploadedMusic: newMusic._id },
     });
-    // return 200
 
+
+
+    try {
+      const emailResponse = await mailSender(
+        'leeloop@gmail.com',
+        "Registeration Successful",
+        musicRegisterSuccessfullMail(artist, "email")
+      );
+      console.log("Email sent successfully:");
+      
+   
+
+    // Sending JSON response with cookie set
     return res.status(200).json({
       sucess: true,
       message: "Music uploaded successfully",
       data: newMusic,
     });
+
+    } catch (error) {
+      // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
+      console.error("Error occurred while sending email:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Error occurred while sending email",
+        error: error.message,
+      });
+
+
+    }
+    // return 200
+
+   
   } catch (error) {
     console.error(error);
     res.status(500).json({

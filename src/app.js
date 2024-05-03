@@ -11,7 +11,7 @@ dotenv.config()
 import userRouter from "./routes/user.route.js"
 import musicRouter from "./routes/music.route.js"
 import adminRouter from "./routes/admin.route.js"
-import paymentRouter from "./routes/payment.route.js"
+// import paymentRouter from "./routes/payment.route.js"
 import chatRouter from "./routes/chat.route.js"
 
 const app = express()
@@ -40,8 +40,8 @@ app.use(
 app.use("/api/v1/user" , userRouter);
 app.use("/api/v1/music" , musicRouter);
 
-// payment 
-app.use("/api/v1/payment", paymentRouter )
+// // payment 
+// app.use("/api/v1/payment", paymentRouter )
 
 
 app.use("/api/v1/chat", chatRouter )

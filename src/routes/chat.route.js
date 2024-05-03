@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {chatCall} from "../controllers/chat.controller.js"
+import {chatLogin,chatSignup} from "../controllers/chat.controller.js"
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -13,7 +13,8 @@ const router = Router();
 // ********************************************************************************************************
 
 
-router.get("/", verifyJWT,chatCall)
+router.post("/login", verifyJWT,chatLogin)
+router.post("/signup", verifyJWT,chatSignup)
 
 
 
