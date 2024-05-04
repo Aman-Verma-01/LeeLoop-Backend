@@ -13,6 +13,7 @@ const router = Router();
 router.route("/upload").post(verifyJWT, uploadMusic);
 router.route("/details").post(verifyJWT, getMusicById);
 router.route("/deleteById").post(verifyJWT, deleteMusic);
+router.route("/delete").post(verifyJWT, deleteMusic);
 
 
 export default router;

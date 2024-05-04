@@ -260,7 +260,7 @@ export const deleteMusic = async (req,res) => {
     const {musicId} = req.body
     const userId = req.user
 
-    console.log(musicId)
+    console.log("musicId " + musicId)
 
 
 
