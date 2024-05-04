@@ -12,7 +12,7 @@ const router = Router();
 // Secured Route
 router.route("/upload").post(verifyJWT, uploadMusic);
 router.route("/details").post(verifyJWT, getMusicById);
-router.route("/deleteById/:id").delete(verifyJWT, deleteMusic);
+router.route("/deleteById").post(verifyJWT, deleteMusic);
 
 
 export default router;

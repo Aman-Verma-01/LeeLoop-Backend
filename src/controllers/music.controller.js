@@ -3,6 +3,7 @@ import { Music } from "../models/music.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import {mailSender} from "../utils/mailSender.js"
 import {musicRegisterSuccessfullMail} from "../mails/musicUploadedMail.js"
+import Stripe from 'stripe'
 
 
 import dotenv from "dotenv";
@@ -60,6 +61,52 @@ export const uploadMusic = async (req, res) => {
       });
     }
 
+
+    let amount = 5 
+    if(coverImageByLeeLoop)
+      {
+        amount=amount+5
+      }
+
+    if(musicMastering)
+     {
+      amount=amount+8
+     }
+
+
+
+
+    // **********************************************************
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+   
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types:['card'],
+      mode:"payment",
+      success_url:process.env.STRIPE_SUCCESS_URL,
+       line_items:[
+        {
+          price_data:{
+            currency:process.env.STRIPE_CURRENCY,
+            unit_amount: amount * 100,
+            product_data:{
+              name:"Buy Music"
+            }
+          },
+          quantity:1
+        }
+      ]
+
+    })
+   
+
+
+
+
+
+    // **************************************************
+
+
     // get artist mongoid from req.user
     const artist = req.user;
 
@@ -101,11 +148,21 @@ export const uploadMusic = async (req, res) => {
    
 
     // Sending JSON response with cookie set
-    return res.status(200).json({
-      sucess: true,
-      message: "Music uploaded successfully",
-      data: newMusic,
-    });
+
+    // Chnaged it 
+    
+    // return res.status(200).json({
+    //   sucess: true,
+    //   message: "Music uploaded successfully",
+    //   data: newMusic,
+    // });
+
+///********************************* */
+    res.status(200).json({
+      success:true,
+      message:"Paid",
+      session:session
+    })
 
     } catch (error) {
       // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
@@ -200,25 +257,54 @@ export const updateMusic = async (req, res) => {
 
 export const deleteMusic = async (req,res) => {
   try {
-    const musicId = req.params.musicId;
+    const {musicId} = req.body
     const userId = req.user
+
+    console.log(musicId)
+
 
 
     const music = await Music.findById(musicId)
     if (!music) {
-      return res.status(404).json({ message: "Music not found" })
+      return res.status(404).json({ message: "Music not found"})
     }
 
 
 
 
-    const user = await User.findById(userId)
-    
 
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+   
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types:['card'],
+      mode:"payment",
+      success_url:process.env.STRIPE_SUCCESS_URL,
+       line_items:[
+        {
+          price_data:{
+            currency:process.env.STRIPE_CURRENCY,
+            unit_amount: 120 * 100,
+            product_data:{
+              name:"Delete Music"
+            }
+          },
+          quantity:1
+        }
+      ]
+
+    })
+
+
+    await  await User.findByIdAndUpdate(userId, {
+      $pull: { uploadMusic: musicId },
+    })
+
+    await Music.findByIdAndDelete(musicId)
 
    
 
-    res.status(200).json({ message: 'Music deleted successfully.' });
+    res.status(200).json({ message: 'Music deleted successfully.' , session:session });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal server error.' });
