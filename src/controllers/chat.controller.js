@@ -6,12 +6,14 @@ dotenv.config();
 
 export const chatSignup = async (req, res) => {
   try {
-    const userId = req.user;
+    const {userId} = req.body;
 
     const user = await User.findById(userId);
 
     const username = user.email;
     const secret = user.email;
+    const  email = user.email; 
+    const  first_name = user.username;
 
     if (user.chat === true) {
       return res.status(401).json({
@@ -21,7 +23,7 @@ export const chatSignup = async (req, res) => {
       try {
         const r = await axios.post(
           "https://api.chatengine.io/users/",
-          { username, secret },
+          { username, secret , email , first_name  },
           { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
         );
 

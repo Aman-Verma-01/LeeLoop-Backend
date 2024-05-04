@@ -75,7 +75,7 @@ export const uploadMusic = async (req, res) => {
       subTitle,
       mainGenre,
       duration,
-      musicMastering:true,
+      musicMastering,
       coverImageByLeeLoop,
       artist: artist,
       coverImage: coverImageURL,
@@ -203,14 +203,18 @@ export const deleteMusic = async (req,res) => {
     const musicId = req.params.musicId;
     const userId = req.user
 
-    // Delete the music by its ID from the Music collection
-    await Music.findByIdAndDelete(musicId);
 
-    const user = await User.findByIdAndUpdate(userId , {
-      $pull : {
-        uploadedMusic : musicId
-      }
-    });
+    const music = await Music.findById(musicId)
+    if (!music) {
+      return res.status(404).json({ message: "Music not found" })
+    }
+
+
+
+
+    const user = await User.findById(userId)
+    
+
 
    
 

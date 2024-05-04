@@ -14,7 +14,7 @@ const router = Router();
 
 
 router.post("/login", verifyJWT,chatLogin)
-router.post("/signup", verifyJWT,chatSignup)
+router.post("/signup",chatSignup)
 
 
 
